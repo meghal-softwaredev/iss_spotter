@@ -1,9 +1,14 @@
-const { fetchMyIP } = require('./iss');
+const { date } = require('assert-plus');
+const { nextISSTimesForMyLocation } = require('./iss');
 
-fetchMyIP((error, ip) => {
+nextISSTimesForMyLocation((error, passTimes) => {
   if (error) {
-    console.log("It didn't work!" , error);
-    return;
+    return console.log("It didn't work!", error);
   }
-  console.log('It worked! Returned IP:' , ip);
+  for (const time of passTimes) {
+    const datetime = new Date(0);
+    datetime.setUTCSeconds(time.risetime);
+    const duration = time.duration;
+    console.log(`Next pass at ${datetime} for ${duration} seconds!`);
+  }
 });
